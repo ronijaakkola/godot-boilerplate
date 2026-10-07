@@ -43,3 +43,4 @@ Done when:
     - `pre-commit` lints the working-tree version of the staged files, not the staged content.
     - `check.py` writes `build/.gdignore`, so Godot stops importing the PNGs in `build/web/`.
   - **For later tickets:** `await_signal` misses a signal emitted during the call itself; use `monitor_signals` + `assert_signal().is_emitted` (in the `gdunit-tests` skill). Headless scene-runner mouse clicks on Controls and key presses work. 3D physics picking is still untested. `docs/web-constraints.md` links into `.scratch/…/research/`, so that link depends on what jam-day cleanup does with `.scratch/`.
+  - **Hook verified end-to-end (2026-10-07):** the user created `.claude/settings.json` (commit `build(claude): add lint hook and check.py allowlist`). An agent `Write` of a `.gd` with a bad function name got the gdlint problem back as a blocking PostToolUse error, without a restart. Both project skills show up in the agent's skill list.
