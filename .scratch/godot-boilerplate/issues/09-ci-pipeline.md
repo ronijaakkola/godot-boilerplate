@@ -1,7 +1,7 @@
 # Build the CI pipeline
 
 Type: task
-Status: open
+Status: claimed
 Blocked by: 05, 08
 
 ## Question
@@ -17,3 +17,5 @@ Notes:
 - From the core-systems design ticket: `build/` has no `.gdignore`, and the preset's `all_resources` filter packs the previous export's `build/web/*` into the next `.pck` (seen: `res://build/…/index.png` inside the pck). Add `build/.gdignore` (or `build/*` to `exclude_filter`) before CI exports.
 - From the agent guidance ticket: CI reuses `uv run tools/check.py` (`lint`, `load`, `smoke`; `test` too if it's simpler than gdUnit4-action) on Linux, so local and CI checks match. It needs uv in the runner and `GODOT` pointing at setup-godot's binary. `tools/*` is already in the Web `exclude_filter`.
 - From the itch.io setup ticket: the repo is public at `ronijaakkola/godot-boilerplate`, so making the test job a required check needs no paid plan. `BUTLER_API_KEY` and `ITCH_TARGET=nashtanir/game-off-2026` are already set. The itch page is a draft, so check the deploy while logged in as `nashtanir`.
+- Progress (2026-10-07): [PR #1](https://github.com/ronijaakkola/godot-boilerplate/pull/1) (branch `ci/pipeline`) adds both workflows and `build/*` to the Web `exclude_filter` (a second local export is now the same size, with no `res://build/` paths in the pck). The `test` job passed on the PR in 44s with Godot 4.7.2 under xvfb. With an empty `test/`, gdUnit4 prints "No test cases found" and exits 0, and the action's publish step has `fail-on-empty: 'false'`, so no trivial test is needed. **Left for the human**, because the agent was not permitted to do them: make `test` a required check on `main`, squash-merge the PR, confirm the first `deploy-web` run, then tick "played in the browser" on the `html5` upload.
+- Open question: once `test` is required, the CLAUDE.md rule "merge with local `git merge --squash`, then push" only works for admins, because a local squash commit has no check runs. Teammates would need to merge on GitHub with "Squash and merge" instead. Decide whether to update CLAUDE.md and the repo's merge settings.

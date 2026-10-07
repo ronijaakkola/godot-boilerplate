@@ -26,3 +26,7 @@ Done when:
 - An agent edit that breaks a lint rule gets the problem fed back by the hook.
 - A commit with a lint error is blocked.
 - **HITL on Windows:** clone, set `GODOT`, run `check all`, make one lint-failing edit through Claude Code and one commit. Record the results here, or "Windows untested" if nobody is available before November.
+
+## Comments
+
+- From the CI pipeline ticket: the Web `exclude_filter` is `addons/gdUnit4/*, test/*, build/*`. It does **not** include `tools/*` yet, despite an earlier note saying it did, so add it when creating `tools/`. Once `check.py` exists, add a CI job (or a step in `pr-tests.yml`) that runs `uv run tools/check.py lint load smoke` on Linux. It needs `astral-sh/setup-uv` and `GODOT` pointing at a 4.7.2 binary; gdUnit4-action installs Godot at `/home/runner/godot-linux/godot`, or use `setup-godot`.
