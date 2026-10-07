@@ -1,7 +1,7 @@
 # Build the agent guidance
 
 Type: task
-Status: claimed
+Status: resolved
 Blocked by: 07
 
 ## Question
@@ -44,3 +44,20 @@ Done when:
     - `check.py` writes `build/.gdignore`, so Godot stops importing the PNGs in `build/web/`.
   - **For later tickets:** `await_signal` misses a signal emitted during the call itself; use `monitor_signals` + `assert_signal().is_emitted` (in the `gdunit-tests` skill). Headless scene-runner mouse clicks on Controls and key presses work. 3D physics picking is still untested. `docs/web-constraints.md` links into `.scratch/…/research/`, so that link depends on what jam-day cleanup does with `.scratch/`.
   - **Hook verified end-to-end (2026-10-07):** the user created `.claude/settings.json` (commit `build(claude): add lint hook and check.py allowlist`). An agent `Write` of a `.gd` with a bad function name got the gdlint problem back as a blocking PostToolUse error, without a restart. Both project skills show up in the agent's skill list.
+
+## Answer
+
+Built ([PR #2](https://github.com/ronijaakkola/godot-boilerplate/pull/2), squash-merged), verified on the Mac and in CI. The Windows run moved to its own ticket, [Verify the checks on Windows](15-verify-checks-on-windows.md), because the user will test it later.
+
+Facts later tickets depend on:
+
+- **Running checks:** `uv run tools/check.py lint [files] | load | test | smoke [scene] | capture <scene> | all`. Each step prints `PASS`/`FAIL` and exits non-zero on failure. Godot comes from `GODOT` or the PATH and must be 4.7.2. Every Godot step imports the project first (about 1.5 s).
+- **`load`** (`tools/load_check.gd`) loads every `.gd`, `.tscn` and `.tres` outside `addons/`, and fails on a parse or type error, a missing dependency, or any logged `ERROR`.
+- **`test`** runs gdUnit4's CLI headless without fail-fast. Reports go to `build/reports/`. An empty `test/` passes, and a test file that fails to parse aborts the run with exit 105.
+- **`smoke`** runs the main scene, or the given one, headless for 300 frames and fails on `^(SCRIPT )?ERROR`. It is SKIPPED until `project.godot` has a main scene, so SceneFlow and the main menu ticket turns it on.
+- **`capture`** runs windowed with `--write-movie` and writes 60 frames to `build/capture/`, naming the last one. Mac only, not CI.
+- **Hooks:** `.claude/settings.json` runs `lint --hook` on every `Edit|Write` of a `.gd` outside `addons/`, and a problem comes back as a blocking error (verified end-to-end). It also allowlists `uv run tools/check.py`. `pre-commit` lints the working-tree version of the staged `.gd` files.
+- **CI:** `pr-tests.yml` has a `checks` job (setup-uv v10.2.0 + setup-godot v2.4.3) that runs `lint`, `load` and `smoke`. It is now required on `main` next to `test`.
+- **Docs:** the `CLAUDE.md` Godot section (pointers, the checks table, the handoff rules), `CODING_STANDARDS.md` (with the autoload table and the dev-console rule), `DESIGN.md` (the example game scene), `docs/web-constraints.md`, and the `gdunit-tests` and `edit-tscn` skills. The Web `exclude_filter` now also drops `tools/*`.
+- **gdUnit4 facts, verified:** headless scene-runner mouse clicks on Controls and key presses work. `await_signal` misses a signal that fires during the call itself, so use `monitor_signals` + `assert_signal().is_emitted`. 3D physics picking is untested.
+- The deviations from the agent guidance decision are listed in the comments above.
