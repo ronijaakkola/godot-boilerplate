@@ -24,3 +24,20 @@ jobs:
           timeout: 10
           warnings-as-errors: false
           report-name: test-report.xml
+  checks:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: astral-sh/setup-uv@v10.2.0
+      - uses: chickensoft-games/setup-godot@v2.4.3
+        with:
+          version: 4.7.2
+          use-dotnet: false
+          include-templates: false
+      - name: Lint
+        run: uv run tools/check.py lint
+      - name: Load check
+        run: uv run tools/check.py load
+      - name: Smoke run
+        run: uv run tools/check.py smoke

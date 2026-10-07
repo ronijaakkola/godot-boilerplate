@@ -1,7 +1,7 @@
 # Build the agent guidance
 
 Type: task
-Status: open
+Status: claimed
 Blocked by: 07
 
 ## Question
