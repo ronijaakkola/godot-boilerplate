@@ -153,6 +153,9 @@ def godot() -> str:
             'setx GODOT "C:\\Godot\\Godot_v4.7.2-stable_win64_console.exe", '
             "Mac: export GODOT=/Applications/Godot.app/Contents/MacOS/Godot"
         )
+    # build/ holds exports, reports and captures. A .gdignore keeps Godot from importing it.
+    Path("build").mkdir(exist_ok=True)
+    Path("build/.gdignore").touch()
     # The import's exit code can't be trusted (it sometimes crashes on exit
     # after finishing), so check for its output instead.
     run([binary, "--headless", "--path", ".", "--import"])
@@ -187,9 +190,6 @@ def run(command: list[str]) -> subprocess.CompletedProcess:
 
 
 def ensure_build_dir(path: str) -> Path:
-    """build/ holds reports and captures. A .gdignore keeps Godot from importing it."""
-    Path("build").mkdir(exist_ok=True)
-    Path("build/.gdignore").touch()
     directory = Path(path)
     directory.mkdir(parents=True, exist_ok=True)
     return directory
