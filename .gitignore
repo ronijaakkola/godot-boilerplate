@@ -1,0 +1,7 @@
+# Godot 4+ specific ignores
+.godot/
+/android/
+
+# gdUnit4 reports and local export output
+reports/
+build/
