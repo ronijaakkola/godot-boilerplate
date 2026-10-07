@@ -1,0 +1,26 @@
+name: pr-tests
+on:
+  pull_request:
+concurrency:
+  group: pr-tests-${{ github.event.number }}
+  cancel-in-progress: true
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      actions: write
+      checks: write
+      contents: write
+      pull-requests: write
+      statuses: write
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: godot-gdunit-labs/gdUnit4-action@v1.3.2
+        with:
+          godot-version: '4.7.2'
+          version: installed # use the vendored addons/gdUnit4
+          paths: res://test
+          timeout: 10
+          warnings-as-errors: false
+          report-name: test-report.xml
