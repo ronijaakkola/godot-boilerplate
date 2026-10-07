@@ -16,3 +16,4 @@ Notes:
 
 - From the core-systems design ticket: `build/` has no `.gdignore`, and the preset's `all_resources` filter packs the previous export's `build/web/*` into the next `.pck` (seen: `res://build/…/index.png` inside the pck). Add `build/.gdignore` (or `build/*` to `exclude_filter`) before CI exports.
 - From the agent guidance ticket: CI reuses `uv run tools/check.py` (`lint`, `load`, `smoke`; `test` too if it's simpler than gdUnit4-action) on Linux, so local and CI checks match. It needs uv in the runner and `GODOT` pointing at setup-godot's binary. `tools/*` is already in the Web `exclude_filter`.
+- From the itch.io setup ticket: the repo is public at `ronijaakkola/godot-boilerplate`, so making the test job a required check needs no paid plan. `BUTLER_API_KEY` and `ITCH_TARGET=nashtanir/game-off-2026` are already set. The itch page is a draft, so check the deploy while logged in as `nashtanir`.
