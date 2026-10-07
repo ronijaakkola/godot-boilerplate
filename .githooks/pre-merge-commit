@@ -1,0 +1,12 @@
+#!/bin/sh
+# Merges into this repo are squashes; block merge commits.
+cat >&2 <<MSG
+pre-merge-commit: merge commits are not allowed in this repo.
+
+Squash the branch instead:
+  git merge --squash <branch>
+  git commit -m "<type>: <description>"
+
+If this came from 'git pull', use 'git pull --rebase'.
+MSG
+exit 1

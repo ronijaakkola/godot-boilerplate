@@ -1,0 +1,14 @@
+#!/bin/sh
+# Block finishing a merge with 'git commit' (after a conflict or a blocked
+# pre-merge-commit). Squash merges don't set MERGE_HEAD, so they pass.
+if [ -f "$(git rev-parse --git-path MERGE_HEAD)" ]; then
+  cat >&2 <<MSG
+pre-commit: merge commits are not allowed in this repo.
+
+Abort and squash instead:
+  git merge --abort
+  git merge --squash <branch>
+  git commit -m "<type>: <description>"
+MSG
+  exit 1
+fi
