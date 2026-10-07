@@ -24,6 +24,14 @@ _Avoid_: request signal, `*_requested`
 The core system that moves the player between top-level scenes (menu → game) with transitions. Named `SceneFlow` in code.
 _Avoid_: router, scene manager
 
+**Settings**:
+The player's preferences (volumes, mouse sensitivity and similar), kept across sessions. Never game progress. Named `Settings` in code.
+_Avoid_: options, config, preferences file
+
+**Save game**:
+The player's progress in the game itself. It depends on the game idea, so the boilerplate doesn't have one.
+_Avoid_: settings, save file (ambiguous)
+
 **Example game scene**:
 The small playable scene that shows the patterns to copy; it is replaced by the real game on jam day.
 _Avoid_: demo, sample level
@@ -31,3 +39,11 @@ _Avoid_: demo, sample level
 **Visual check**:
 A human looking at a change in the editor or browser to judge its feel, which an agent can't sign off on alone.
 _Avoid_: QA, review
+
+**Load check**:
+Compiling every script in the project at once to catch syntax and type errors before anything runs.
+_Avoid_: check-only, compile check
+
+**Smoke run**:
+Starting the game briefly without a window and failing if any error is logged, since runtime errors don't stop the game on their own.
+_Avoid_: smoke test, headless run
