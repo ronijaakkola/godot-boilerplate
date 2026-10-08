@@ -25,6 +25,7 @@ Events="*res://core/events/events.gd"
 Audio="*res://core/audio/audio.gd"
 Settings="*res://core/settings/settings.gd"
 SceneFlow="*res://core/scene_flow/scene_flow.gd"
+DevConsole="*res://core/dev_console/dev_console.gd"
 
 [debug]
 
