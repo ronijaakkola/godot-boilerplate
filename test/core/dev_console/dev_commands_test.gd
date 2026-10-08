@@ -4,6 +4,8 @@ const GAME := "res://game/game.tscn"
 
 
 func after_test() -> void:
+	# goto runs on the live SceneFlow; let its fade-in end before the next suite.
+	await assert_func(get_tree().root, "is_input_disabled").wait_until(2000).is_false()
 	get_tree().unload_current_scene()
 
 
