@@ -53,7 +53,7 @@ await runner.await_input_processed()
 - Wait one frame before reading a rect: Containers place their children a frame after entering the tree, so the button still sits at (0, 0) before that.
 - Headless, the window is 64×64, and the `canvas_items` stretch scales every simulated click to match, so clicks miss. A suite that clicks sets the window to the base size in `before()` and restores it in `after()`. `test/ui/main_menu/main_menu_test.gd` shows both.
 
-Keys and actions work the same way: `simulate_key_pressed(KEY_ESCAPE)`, `simulate_action_pressed("pause")`. Ignore the startup warning that input events aren't transported in headless mode; the cases above pass headless. Clicking a 3D object through physics picking is unverified, so test the picking logic by calling the method that handles the click.
+Keys and actions have their own calls, `simulate_key_pressed(KEY_ESCAPE)` and `simulate_action_pressed("pause")`, with one trap (below). Ignore the startup warning that input events aren't transported in headless mode; the cases above pass headless. Clicking a 3D object through physics picking is unverified, so test the picking logic by calling the method that handles the click.
 
 The runner's key and action calls deliver each event twice to the scene root's `_unhandled_input`: once through the viewport and once by calling it directly. A root that toggles on a key (the pause menu on Esc) toggles back. For those, send the event through `Input` alone, as `test/ui/pause_menu/pause_menu_test.gd` does:
 
