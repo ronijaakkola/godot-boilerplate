@@ -18,3 +18,4 @@ Done when a local web export's `.pck` is under 1 MB plus our own assets, the exp
 ## Comments
 
 - From the agent guidance ticket: the guidance gets built before this ticket, so add the console rule (LimboConsole only in `core/dev_console/dev_commands.gd`) to `CODING_STANDARDS.md` yourself. Done also requires `uv run tools/check.py all` to pass.
+- From the SceneFlow and main menu ticket: `goto` calls `SceneFlow.go_to(path)` without awaiting it. A local Web export with the menu music is 8.9 MB of `.pck`; the music alone is 1.2 MB. `check.py smoke` and `capture` now ignore Godot's at-exit "resources still in use" line, which a playing Ogg causes, so don't count that line against the one accepted autoload error.
