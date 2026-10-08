@@ -98,5 +98,6 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Back"
 
+[connection signal="drag_ended" from="Center/Panel/Margin/Items/Volumes/SfxSlider" to="." method="_on_sfx_slider_drag_ended"]
 [connection signal="toggled" from="Center/Panel/Margin/Items/ReduceMotionButton" to="." method="_on_reduce_motion_button_toggled"]
 [connection signal="pressed" from="Center/Panel/Margin/Items/BackButton" to="." method="_on_back_button_pressed"]

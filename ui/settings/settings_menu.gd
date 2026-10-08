@@ -5,10 +5,6 @@ extends Control
 
 const DEMO_SFX := preload("res://shared/audio/ui_click.ogg")
 
-# Every assignment to Settings saves the file, so a slider commits when its drag ends,
-# not on every step. Wheel and arrow-key changes aren't drags and commit at once.
-var _dragging := false
-
 @onready var _volumes: Dictionary[HSlider, StringName] = {
 	%MasterSlider: &"master_volume",
 	%MusicSlider: &"music_volume",
@@ -18,8 +14,8 @@ var _dragging := false
 
 func _ready() -> void:
 	for slider: HSlider in _volumes:
-		slider.drag_started.connect(_on_volume_drag_started)
-		slider.drag_ended.connect(_on_volume_drag_ended.bind(slider))
+		# Every step of a drag is heard at once, and saved. On the web the saves reach
+		# the browser's storage at most once a frame.
 		slider.value_changed.connect(_on_volume_value_changed.bind(slider))
 	_read_settings()
 
@@ -36,24 +32,12 @@ func _read_settings() -> void:
 	%ReduceMotionButton.set_pressed_no_signal(Settings.reduce_motion)
 
 
-func _commit(slider: HSlider) -> void:
-	Settings.set(_volumes[slider], slider.value)
+func _on_volume_value_changed(value: float, slider: HSlider) -> void:
+	Settings.set(_volumes[slider], value)
 
 
-func _on_volume_drag_started() -> void:
-	_dragging = true
-
-
-func _on_volume_drag_ended(_value_changed: bool, slider: HSlider) -> void:
-	_dragging = false
-	_commit(slider)
-	if slider == %SfxSlider:
-		Audio.play_sfx(DEMO_SFX)
-
-
-func _on_volume_value_changed(_value: float, slider: HSlider) -> void:
-	if not _dragging:
-		_commit(slider)
+func _on_sfx_slider_drag_ended(_value_changed: bool) -> void:
+	Audio.play_sfx(DEMO_SFX)
 
 
 func _on_reduce_motion_button_toggled(toggled_on: bool) -> void:
