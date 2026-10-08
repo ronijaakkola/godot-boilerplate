@@ -14,3 +14,7 @@ AFK build, per the [core-systems design](06-core-systems-design.md).
 - **Web start overlay:** "click anywhere to start", web only (`OS.has_feature("web")`); that click calls `Audio.play_music`. Desktop starts the music directly.
 
 Done when the menu → stub game → menu flow works in a headless smoke run, the load check is clean, and a windowed frame capture shows the menu. Handoff names the menu for a visual check.
+
+## Comments
+
+- From the Audio and Settings ticket: the web start overlay (and desktop boot) calls `Audio.play_music(preload("res://shared/audio/menu_music.ogg"))`. The track is set to loop in its `.import`. Setting a main scene turns `check.py smoke` on; until then the `test` run is the only check that boots the autoloads.

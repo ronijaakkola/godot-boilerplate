@@ -13,3 +13,7 @@ AFK build, per the [core-systems design](06-core-systems-design.md).
 - **Wiring:** the main menu's Settings button opens the same panel.
 
 Done when both menus instantiate alone, a test covers pause toggling and settings binding, and a frame capture shows both. Handoff names them for a visual check.
+
+## Comments
+
+- From the Audio and Settings ticket: the SFX slider's demo sound is `shared/audio/ui_click.ogg` via `Audio.play_sfx(...)`. Every assignment to a `Settings` property applies it and saves the file, so assign `Settings.master_volume` / `music_volume` / `sfx_volume` (linear 0–1) only on `drag_ended`, and `reduce_motion` on toggle. For tests, follow the fresh-instance pattern in `test/core/settings/settings_test.gd` so the developer's own `user://settings.cfg` survives.
