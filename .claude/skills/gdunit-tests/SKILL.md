@@ -55,6 +55,16 @@ await runner.await_input_processed()
 
 Keys and actions work the same way: `simulate_key_pressed(KEY_ESCAPE)`, `simulate_action_pressed("pause")`. Ignore the startup warning that input events aren't transported in headless mode; the cases above pass headless. Clicking a 3D object through physics picking is unverified, so test the picking logic by calling the method that handles the click.
 
+The runner's key and action calls deliver each event twice to the scene root's `_unhandled_input`: once through the viewport and once by calling it directly. A root that toggles on a key (the pause menu on Esc) toggles back. For those, send the event through `Input` alone, as `test/ui/pause_menu/pause_menu_test.gd` does:
+
+```gdscript
+var event := InputEventKey.new()
+event.keycode = KEY_ESCAPE
+event.pressed = true
+Input.parse_input_event(event)
+Input.flush_buffered_events()
+```
+
 ## Signals
 
 A signal emitted **during** the call you make (a click, an `invoke`) has already fired before any `await` starts. Start monitoring first, then assert:

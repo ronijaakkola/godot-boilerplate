@@ -1,6 +1,7 @@
 extends CanvasLayer
 ## Moves between top-level scenes with a fade to black. Input is blocked while fading.
-## It processes always, so a paused scene can leave too.
+## It processes always, so a paused scene can leave too, and the next scene starts
+## unpaused.
 
 const FADE := 0.25
 
@@ -27,6 +28,7 @@ func go_to(path: String) -> void:
 	_busy = true
 	get_tree().root.set_disable_input(true)
 	await _fade_to(1.0)
+	get_tree().paused = false
 	var error := get_tree().change_scene_to_packed(load(path))
 	if error == OK:
 		await get_tree().scene_changed

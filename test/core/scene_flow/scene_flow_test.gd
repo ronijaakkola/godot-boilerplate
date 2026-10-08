@@ -14,6 +14,7 @@ func before_test() -> void:
 func after_test() -> void:
 	# A failed transition must not leave input off for the rest of the suite.
 	get_tree().root.set_disable_input(false)
+	get_tree().paused = false
 	get_tree().unload_current_scene()
 
 
@@ -33,3 +34,9 @@ func test_ignores_a_call_during_a_transition() -> void:
 	await _flow.go_to("res://does_not_exist.tscn")
 	await await_signal_on(get_tree(), "scene_changed", [], 2000)
 	assert_str(get_tree().current_scene.scene_file_path).is_equal(GAME)
+
+
+func test_the_next_scene_starts_unpaused() -> void:
+	get_tree().paused = true
+	await _flow.go_to(GAME)
+	assert_bool(get_tree().paused).is_false()

@@ -32,11 +32,19 @@ func test_play_goes_to_the_game_and_back() -> void:
 	assert_str(get_tree().current_scene.scene_file_path).is_equal(GAME)
 	await assert_func(get_tree().root, "is_input_disabled").wait_until(2000).is_false()
 
-	# The game isn't in the runner, so press its button directly.
-	(get_tree().current_scene.find_child("MenuButton") as Button).pressed.emit()
+	# The game isn't in the runner, so press its pause menu's button directly. The button
+	# belongs to the pause menu's own scene, so find_child must search unowned nodes.
+	var game := get_tree().current_scene
+	(game.find_child("MainMenuButton", true, false) as Button).pressed.emit()
 	await await_signal_on(get_tree(), "scene_changed", [], 2000)
 	assert_str(get_tree().current_scene.scene_file_path).is_equal(MENU)
 	await assert_func(get_tree().root, "is_input_disabled").wait_until(2000).is_false()
+
+
+func test_settings_button_opens_the_settings_panel() -> void:
+	var runner := scene_runner(MENU)
+	await _click(runner, runner.find_child("SettingsButton"))
+	assert_bool((runner.find_child("SettingsMenu") as Control).visible).is_true()
 
 
 func test_start_overlay_click_starts_the_music() -> void:

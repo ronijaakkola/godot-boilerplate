@@ -34,7 +34,7 @@ func _on_play_button_pressed() -> void:
 
 
 func _on_settings_button_pressed() -> void:
-	pass  # Opens the settings panel, once it exists.
+	%SettingsMenu.open()
 
 
 func _on_quit_button_pressed() -> void:
