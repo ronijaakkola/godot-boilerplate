@@ -1,4 +1,4 @@
-name: pr-tests
+name: pr
 on:
   pull_request:
 concurrency:
@@ -6,6 +6,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   test:
+    name: gdUnit4 tests
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     permissions:
@@ -25,6 +26,7 @@ jobs:
           warnings-as-errors: false
           report-name: test-report.xml
   checks:
+    name: Lint, load check, smoke run
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:

@@ -53,4 +53,4 @@ Web export, for a local test of the itch build:
 mkdir -p build/web && godot --headless --path . --export-release "Web" build/web/index.html
 ```
 
-Pull requests run `test` (gdUnit4) and `lint`, `load` and `smoke` in CI. Every push to `main` deploys the web build to itch.io.
+Pull requests run two CI checks: `gdUnit4 tests` and `Lint, load check, smoke run`. Both must pass to merge into `main`. Every push to `main` deploys the web build to itch.io.
