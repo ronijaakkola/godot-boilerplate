@@ -30,6 +30,9 @@ SMOKE_FRAMES = "300"
 CAPTURE_FRAMES = "60"
 ERROR_LINE = re.compile(r"^(SCRIPT )?ERROR", re.MULTILINE)
 ANSI = re.compile(r"\x1b\[[0-9;]*[A-Za-z]")
+# Godot 4.7.2 leaks an Ogg stream that is still playing when it quits, so any scene
+# with music logs this at the end of a smoke run. It happens only at exit.
+EXIT_LEAK = re.compile(r"^ERROR: \d+ resources still in use at exit.*$", re.MULTILINE)
 
 
 class CheckFailed(Exception):
@@ -238,6 +241,10 @@ def main_scene() -> str | None:
     return match.group(1) if match else None
 
 
+def logged_error(output: str) -> bool:
+    return bool(ERROR_LINE.search(EXIT_LEAK.sub("", output)))
+
+
 def run_smoke(scene: str | None):
     scene = scene or main_scene()
     if not scene:
@@ -245,7 +252,7 @@ def run_smoke(scene: str | None):
     result = run_godot(
         ["--headless", "--path", ".", "--scene", scene, "--quit-after", SMOKE_FRAMES]
     )
-    if ERROR_LINE.search(result.stdout):
+    if logged_error(result.stdout):
         print(result.stdout, end="")
         raise CheckFailed(f"errors logged while running {scene}")
     return scene
@@ -268,7 +275,7 @@ def run_capture(scene: str):
     if not frames:
         print(result.stdout, end="")
         raise CheckFailed(f"no frames written for {scene}")
-    errors = " (errors logged, see above)" if ERROR_LINE.search(result.stdout) else ""
+    errors = " (errors logged, see above)" if logged_error(result.stdout) else ""
     if errors:
         print(result.stdout, end="")
     return f"{len(frames)} frames, look at {frames[-1].as_posix()}{errors}"

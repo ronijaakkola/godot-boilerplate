@@ -44,10 +44,14 @@ func test_open_pauses() -> void:
 
 ```gdscript
 var button := runner.find_child("PlayButton") as Button
+await runner.simulate_frames(1)
 runner.set_mouse_position(button.get_global_rect().get_center())
 runner.simulate_mouse_button_pressed(MOUSE_BUTTON_LEFT)
 await runner.await_input_processed()
 ```
+
+- Wait one frame before reading a rect: Containers place their children a frame after entering the tree, so the button still sits at (0, 0) before that.
+- Headless, the window is 64×64, and the `canvas_items` stretch scales every simulated click to match, so clicks miss. A suite that clicks sets the window to the base size in `before()` and restores it in `after()`. `test/ui/main_menu/main_menu_test.gd` shows both.
 
 Keys and actions work the same way: `simulate_key_pressed(KEY_ESCAPE)`, `simulate_action_pressed("pause")`. Ignore the startup warning that input events aren't transported in headless mode; the cases above pass headless. Clicking a 3D object through physics picking is unverified, so test the picking logic by calling the method that handles the click.
 
