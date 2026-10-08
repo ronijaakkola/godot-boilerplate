@@ -13,9 +13,16 @@ config_version=5
 config/name="Godot Jam Boilerplate"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 
+[audio]
+
+buses/default_bus_layout="res://core/audio/default_bus_layout.tres"
+
 [autoload]
 
 LimboConsole="*res://addons/limbo_console/limbo_console.gd"
+Events="*res://core/events/events.gd"
+Audio="*res://core/audio/audio.gd"
+Settings="*res://core/settings/settings.gd"
 
 [debug]
 
