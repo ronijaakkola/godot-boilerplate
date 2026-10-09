@@ -4,6 +4,18 @@ const SceneFlowScript := preload("res://core/scene_flow/scene_flow.gd")
 const GAME := "res://game/game.tscn"
 
 var _flow: SceneFlowScript
+var _runner_scene: Node
+
+
+func before() -> void:
+	# In the editor, gdUnit's runner is the current scene, and changing scenes would free
+	# it mid-run. Headless, there is no current scene.
+	_runner_scene = get_tree().current_scene
+	get_tree().current_scene = null
+
+
+func after() -> void:
+	get_tree().current_scene = _runner_scene
 
 
 func before_test() -> void:

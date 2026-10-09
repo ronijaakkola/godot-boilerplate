@@ -2,6 +2,19 @@ extends GdUnitTestSuite
 
 const GAME := "res://game/game.tscn"
 
+var _runner_scene: Node
+
+
+func before() -> void:
+	# In the editor, gdUnit's runner is the current scene, and changing scenes would free
+	# it mid-run. Headless, there is no current scene.
+	_runner_scene = get_tree().current_scene
+	get_tree().current_scene = null
+
+
+func after() -> void:
+	get_tree().current_scene = _runner_scene
+
 
 func after_test() -> void:
 	# goto runs on the live SceneFlow; let its fade-in end before the next suite.

@@ -5,9 +5,14 @@ const GAME := "res://game/game.tscn"
 const MUSIC := preload("res://shared/audio/menu_music.ogg")
 
 var _window_size: Vector2i
+var _runner_scene: Node
 
 
 func before() -> void:
+	# In the editor, gdUnit's runner is the current scene, and changing scenes would free
+	# it mid-run. Headless, there is no current scene.
+	_runner_scene = get_tree().current_scene
+	get_tree().current_scene = null
 	# Headless, the window is 64×64, and the canvas_items stretch would scale every
 	# simulated click by 18. At the base size it scales by 1.
 	_window_size = get_tree().root.size
@@ -16,6 +21,7 @@ func before() -> void:
 
 func after() -> void:
 	get_tree().root.size = _window_size
+	get_tree().current_scene = _runner_scene
 
 
 func after_test() -> void:
