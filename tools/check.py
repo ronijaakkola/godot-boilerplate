@@ -54,6 +54,9 @@ def main() -> int:
     commands.add_parser("all")
     args = parser.parse_args()
     os.chdir(ROOT)
+    # Windows pipes default to cp1252, which mangles non-ASCII paths (C:\Users\Mäkinen).
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
     if args.command == "lint" and args.hook:
         return lint_hook()
@@ -100,6 +103,7 @@ def gdlint(paths: list[str]) -> subprocess.CompletedProcess:
     cache.mkdir(parents=True, exist_ok=True)
     return subprocess.run(
         [sys.executable, "-m", "gdtoolkit.linter", *paths],
+        env={**os.environ, "PYTHONUTF8": "1"},
         capture_output=True,
         text=True,
         encoding="utf-8",
@@ -119,7 +123,8 @@ def run_lint(files: list[str]):
 
 
 def lint_hook() -> int:
-    file_path = json.load(sys.stdin).get("tool_input", {}).get("file_path", "")
+    # Claude Code sends UTF-8. Read bytes, since sys.stdin decodes as cp1252 on Windows.
+    file_path = json.load(sys.stdin.buffer).get("tool_input", {}).get("file_path", "")
     if not file_path or not lintable(file_path):
         return 0
     result = gdlint([file_path])

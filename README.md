@@ -8,7 +8,7 @@ Godot 4.7.2 GDScript project, web (itch.io) first, Compatibility renderer.
 2. Install the **4.7.2 Web export templates**. In the editor: **Editor → Manage Export Templates…**, download only the Web templates. Templates from another version (even 4.7.1) fail with "No export template found".
 3. Install [uv](https://docs.astral.sh/uv/). `tools/check.py` runs through it and fetches its own Python packages.
 4. Point the checks at Godot. They use the `GODOT` environment variable, or `godot` on the PATH.
-   - **Windows:** `setx GODOT "C:\path\to\Godot_v4.7.2-stable_win64_console.exe"`, then open a new terminal. Use the `_console` executable; the other one prints nothing.
+   - **Windows:** `setx GODOT "C:\path\to\Godot_v4.7.2-stable_win64_console.exe"`, then open a new terminal and start Claude Code from that one, since terminals that were already open don't see the variable. Use the `_console` executable; the other one prints nothing. Clone to a short path (under about 120 characters). gdUnit4's files and Godot's `.godot/` cache are deeply nested, and git stops at Windows' 260-character limit unless `git config --global core.longpaths true` is set.
    - **Mac:** `export GODOT=/Applications/Godot.app/Contents/MacOS/Godot` in your shell profile, or `brew install godot` if it installs 4.7.2.
 5. Enable the git hooks once per clone: `git config core.hooksPath .githooks`.
 6. Run `uv run tools/check.py all`. It imports the project and should end with `PASS all`.
