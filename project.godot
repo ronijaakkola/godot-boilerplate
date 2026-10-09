@@ -40,6 +40,10 @@ window/stretch/aspect="expand"
 
 enabled=PackedStringArray("res://addons/gdUnit4/plugin.cfg", "res://addons/limbo_console/plugin.cfg")
 
+[gdunit4]
+
+settings/test/test_discovery=true
+
 [input]
 
 pause={

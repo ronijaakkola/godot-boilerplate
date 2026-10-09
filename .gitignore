@@ -5,3 +5,6 @@
 # gdUnit4 reports and local export output
 reports/
 build/
+
+# gdUnit4's last editor test session (local)
+addons/gdUnit4/GdUnitRunner.cfg
