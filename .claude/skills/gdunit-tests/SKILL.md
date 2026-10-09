@@ -85,6 +85,25 @@ Autoloads (`Events`, `Audio`, `Settings`, `SceneFlow`) are live during tests and
 
 To test a core system from a clean start, add a fresh instance of its script instead of using the live autoload: `add_child(auto_free(preload("res://core/settings/settings.gd").new()))` runs its `_ready()`. `user://settings.cfg` is the developer's own settings file, so never just delete it. `test/core/settings/settings_test.gd` shows the pattern: delete the file in `before_test()`, then in `after()` assign each live `Settings` value back to itself, which re-saves the file and restores the bus volumes.
 
+## Tests that change scenes
+
+When the editor's GdUnit panel runs the tests, gdUnit's runner scene is the tree's current scene. A test that changes scenes (`SceneFlow.go_to`, `change_scene_to_*`, the `goto` command) frees the runner, and the editor run then hangs with no error. Headless there is no current scene, so `check.py test` passes anyway. Every suite that changes scenes detaches the runner in `before()` and restores it in `after()`:
+
+```gdscript
+var _runner_scene: Node
+
+
+func before() -> void:
+	_runner_scene = get_tree().current_scene
+	get_tree().current_scene = null
+
+
+func after() -> void:
+	get_tree().current_scene = _runner_scene
+```
+
+`after_test()` can then call `get_tree().unload_current_scene()` without touching the runner. `test/core/scene_flow/scene_flow_test.gd` shows the pattern.
+
 ## Reading a failure
 
 `check.py test` prints the full run when it fails:
