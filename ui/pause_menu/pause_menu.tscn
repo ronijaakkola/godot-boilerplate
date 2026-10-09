@@ -1,15 +1,15 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://kekyce3aucic"]
 
-[ext_resource type="Script" path="res://ui/pause_menu/pause_menu.gd" id="1_pause"]
-[ext_resource type="Theme" path="res://ui/theme.tres" id="2_theme"]
-[ext_resource type="PackedScene" path="res://ui/settings/settings_menu.tscn" id="3_settings"]
+[ext_resource type="Script" uid="uid://b6fec5pw3wl58" path="res://ui/pause_menu/pause_menu.gd" id="1_pause"]
+[ext_resource type="Theme" uid="uid://67yr7b2dkwjh" path="res://ui/theme.tres" id="2_theme"]
+[ext_resource type="PackedScene" uid="uid://du1swv634nyif" path="res://ui/settings/settings_menu.tscn" id="3_settings"]
 
-[node name="PauseMenu" type="CanvasLayer"]
+[node name="PauseMenu" type="CanvasLayer" unique_id=357960298]
 process_mode = 3
 layer = 10
 script = ExtResource("1_pause")
 
-[node name="Root" type="Control" parent="."]
+[node name="Root" type="Control" parent="." unique_id=1212393202]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -18,7 +18,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("2_theme")
 
-[node name="Dim" type="ColorRect" parent="Root"]
+[node name="Dim" type="ColorRect" parent="Root" unique_id=1385886911]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -27,7 +27,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.5)
 
-[node name="Center" type="CenterContainer" parent="Root"]
+[node name="Center" type="CenterContainer" parent="Root" unique_id=818951029]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -35,32 +35,32 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Items" type="VBoxContainer" parent="Root/Center"]
+[node name="Items" type="VBoxContainer" parent="Root/Center" unique_id=1638955660]
 custom_minimum_size = Vector2(280, 0)
 layout_mode = 2
 
-[node name="Title" type="Label" parent="Root/Center/Items"]
+[node name="Title" type="Label" parent="Root/Center/Items" unique_id=670269238]
 layout_mode = 2
 theme_type_variation = &"TitleLabel"
 text = "Paused"
 horizontal_alignment = 1
 
-[node name="ResumeButton" type="Button" parent="Root/Center/Items"]
+[node name="ResumeButton" type="Button" parent="Root/Center/Items" unique_id=682729662]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Resume"
 
-[node name="SettingsButton" type="Button" parent="Root/Center/Items"]
+[node name="SettingsButton" type="Button" parent="Root/Center/Items" unique_id=960285462]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Settings"
 
-[node name="MainMenuButton" type="Button" parent="Root/Center/Items"]
+[node name="MainMenuButton" type="Button" parent="Root/Center/Items" unique_id=2051010234]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Main menu"
 
-[node name="SettingsMenu" parent="Root" instance=ExtResource("3_settings")]
+[node name="SettingsMenu" parent="Root" unique_id=1862376984 instance=ExtResource("3_settings")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
