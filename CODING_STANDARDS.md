@@ -90,6 +90,8 @@ Build UI from Containers (`VBoxContainer`, `MarginContainer`, `CenterContainer`,
 
 Agents may hand-edit any `.tscn` or `.tres` as text, visual properties included. Use the `edit-tscn` skill, which covers `uid://` references and `unique_id`, and run `uv run tools/check.py load` after every edit.
 
+A scene or resource an agent creates has no `uid` in its header and no `unique_id` on its nodes. The first editor save adds random ones. If two people save the same file before that's committed, they get different numbers and every line conflicts. So when an agent creates a `.tscn` or `.tres`, its handoff asks the human to open it in the editor, save it, and commit the result. Save new sub-scenes and resources before the scenes that use them, so the references pick up their uids. Agents don't invent these ids.
+
 After a visual change, capture the scene (`uv run tools/check.py capture <scene>`) and look at the frame. When the change is about feel (the soft look, lighting, camera, motion), end the handoff with "Needs a visual check: `<scene>`". Tuning by eye in the editor is recommended, never required.
 
 ## Tests
